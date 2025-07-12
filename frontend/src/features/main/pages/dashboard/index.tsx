@@ -1,5 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
-import { Plus } from 'lucide-react'
+import { Plus, ArrowDown, ArrowUp, ChevronDown } from 'lucide-react'
 import React from 'react'
 
 const subscriptions = [
@@ -73,25 +72,48 @@ const transactions = [
   { id: 4, name: "Freelance", type: "Credit", amount: "$300", date: "2025-07-06", status: "Success" }
 ];
 
-const barData = [
-  { name: "40K", value: 100, status: "Achieved", achieved: "40K" },
-  { name: "30K", value: 80, status: "24K/28K", achieved: "80%" },
-  { name: "20K", value: 50, status: "10K", achieved: "10K" },
+type FinancialCard = {
+  title: string;
+  amount: string;
+  change: {
+    value: string;
+    percentage: string;
+    positive: boolean;
+  };
+};
+
+const cards: FinancialCard[] = [
+  {
+    title: "Total Income",
+    amount: "1,45,790.00",
+    change: {
+      value: "16.5%",
+      percentage: "16.5%",
+      positive: true
+    }
+  },
+  {
+    title: "Total Expense",
+    amount: "65,340.00",
+    change: {
+      value: "4.78%",
+      percentage: "4.78%",
+      positive: false
+    }
+  }
 ];
 
-const months = ["Feb", "Mar", "Apr", "May", "Jun", "Jul"];
-
-const Dashboard = () => {
+const Index = () => {
   return (
     <>
-      <div className=''>
-        <div className='text-2xl font-semibold py-1'>Home</div>
-        <div className='grid grid-cols-2 grid-row-5 gap-4 my-5'>
-          <div className='flex gap-4'>
-            <div className="flex flex-col bg-white rounded-lg p-4 row-span-2 shadow-md max-h-min w-[50%]">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-lg">Cards</h3>
-                <button className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-gradient-to-r from-black to-gray-800 shadow-md hover:from-black hover:to-gray-700 transition-all duration-200 cursor-pointer">
+      <div>
+        <div className='text-xl md:text-2xl font-semibold py-1'>Home</div>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 my-5'>
+          <div className='flex sm:flex-row flex-col gap-4'>
+            <div className="flex flex-col-reverse md:flex-col gap-2 bg-white rounded-lg p-4 row-span-2 shadow-md max-h-min flex-1/2 h-full">
+              <div className="flex items-center justify-between gap-4 md:mb-4">
+                <h3 className="font-semibold hidden md:block md:text-lg">Cards</h3>
+                <button className="flex items-center justify-center md:justify-normal gap-2 w-full md:w-max py-1.5 px-2 md:px-4 md:py-2 rounded-md text-sm font-medium text-white bg-gradient-to-r from-black to-gray-800 shadow-md hover:from-black hover:to-gray-700 transition-all duration-200 cursor-pointer">
                   <Plus className="w-4 h-4" />
                   Add new card
                 </button>
@@ -103,34 +125,61 @@ const Dashboard = () => {
                   background: `linear-gradient(135deg, #121212 15%, #00b076 90%, #2bd47f 100%)`,
                 }}
               >
-                <p className="text-sm">Account Balance</p>
-                <div className="text-2xl font-bold mt-2 mb-4">$ 22,000</div>
+                <p className="text-xs md:text-sm">Balance</p>
+                <div className="text-xl md:text-2xl font-bold mt-2 mb-4">$ 22,000</div>
 
-                <div className="flex mb-4">
-                  <span className="text-2xl mr-2">**** **** ****</span>
-                  <span className="">1234</span>
+                <div className="flex gap-2 mb-4">
+                  <span className="text-sm md:text-xl">**** **** ****</span>
+                  <span className="text-xs md:text-sm">1234</span>
                 </div>
 
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-xs text-[#C7C4C6] mb-1">Expires</p>
-                    <p className="text-sm text-white">12/22</p>
+                    <p className="text-xs md:text-sm text-white">12/22</p>
                   </div>
                   <div className="flex items-center">
-                    <div className="w-9 h-9 rounded-full bg-[#FF2D55] -mr-4 z-0" />
-                    <div className="w-9 h-9 rounded-full bg-yellow-400 z-10" />
+                    <div className="w-6 h-6 md:w-9 md:h-9 rounded-full bg-[#FF2D55] -mr-2 md:-mr-4 z-0" />
+                    <div className="w-6 h-6 md:w-9 md:h-9 rounded-full bg-yellow-400 z-10" />
                   </div>
                 </div>
               </div>
-            </div>
-            <div className='bg-white rounded-lg p-4 w-[50%] shadow-md'>
 
+               <div className='block md:hidden'>
+                <h3 className='text-lg font-semibold'>Cards</h3>
+              </div>
+            </div>
+            <div className="bg-white rounded-lg p-4 md:max-w-[40%] h-[280px] shadow-md">
+              <div className="flex justify-between mb-4 md:mb-6 mt-2">
+                <h3 className='text-xs md:text-sm font-medium text-gray-500'>Money Flow</h3>
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500 flex items-center gap-1 h-min">
+                  July <ChevronDown className='h-3 w-3' />
+                </span>
+              </div>
+              <div className="flex gap-2 overflow-x-scroll hide-scrollbar h-[190px]">
+                {cards.map((card, index) => (
+                  <div key={index} className="p-4 border border-gray-300 rounded-lg min-w-[180px]">
+                    <h3 className="text-sm font-medium text-gray-500 mb-1">{card.title}</h3>
+                    <div className='flex flex-col gap-1'>
+                      <p className="text-lg font-semibold mb-2">$ {card.amount}</p>
+                      <div className={`flex items-center text-xs md:text-sm ${card.change.positive ? 'text-green-500' : 'text-red-500'}`}>
+                        {card.change.positive ? (
+                          <ArrowUp className="h-4 w-4 mr-1" />
+                        ) : (
+                          <ArrowDown className="h-4 w-4 mr-1" />
+                        )}
+                        <span>{card.change.value}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg p-4 row-span-5 h-[400px] overflow-y-scroll hide-scrollbar">
+          <div className="bg-white rounded-lg p-4 row-span-2 h-80 md:h-[400px] overflow-y-scroll hide-scrollbar">
             <h3 className="text-lg font-semibold mb-4">Subscription History</h3>
 
-            <table className="w-full text-sm text-left border-collapse">
+            <table className="min-w-[600px] w-full text-sm text-left border-collapse">
               <thead className="text-gray-600">
                 <tr className=' border-b border-gray-200'>
                   <th className="p-2">Service</th>
@@ -173,11 +222,10 @@ const Dashboard = () => {
               </tbody>
             </table>
           </div>
-
-          <div className='bg-white rounded-lg p-4 shadow-md row-span-5 h-[520px] overflow-y-scroll hide-scrollbar'>
+          <div className='bg-white rounded-lg p-4 shadow-md row-span-5 h-[480px] md:h-[475px] overflow-y-scroll hide-scrollbar'>
             <h3 className="text-lg font-semibold mb-4">Transaction History</h3>
             <div className="">
-              <table className="w-full text-sm text-left border-collapse">
+              <table className="min-w-[600px] w-full text-sm text-left border-collapse">
                 <thead className="text-gray-600">
                   <tr className="border-b border-gray-200">
                     <th className="p-3">Name</th>
@@ -212,90 +260,9 @@ const Dashboard = () => {
             </div>
 
           </div>
-          <div className="bg-white rounded-lg p-4 shadow-md row-span-2">
-            <div className="flex flex-col h-full">
-              {/* Header */}
-              <div className="mb-6">
-                <h2 className="text-lg font-semibold text-gray-800">Income Goal</h2>
-                <div className="flex justify-between items-center mt-2">
-                  <span className="text-sm text-gray-500">Achieved Target</span>
-                  <span className="text-sm text-gray-500">Last 6 month</span>
-                </div>
-              </div>
+          <div className="bg-white rounded-lg p-4 shadow-md row-span-5 h-[360px] md:h-[355px]">
 
-              {/* Chart Area */}
-              <div className="flex-grow flex flex-col">
-                <div className="flex-grow">
-                  <ResponsiveContainer width="100%" height="80%">
-                    <BarChart
-                      layout="vertical"
-                      data={barData}
-                      margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-                      barCategoryGap={20}
-                    >
-                      <XAxis type="number" hide domain={[0, 100]} />
-                      <YAxis
-                        type="category"
-                        dataKey="name"
-                        axisLine={false}
-                        tickLine={false}
-                        tick={{ fontSize: 14, fontWeight: 500 }}
-                        width={40}
-                      />
-                      <Bar
-                        dataKey="value"
-                        radius={[0, 4, 4, 0]}
-                        barSize={12}
-                        background={{ fill: "#e5e7eb", radius: 4 }}
-                      >
-                        {barData.map((entry, index) => (
-                          <Bar
-                            key={`bar-${index}`}
-                            dataKey="value"
-                            fill={
-                              index === 0
-                                ? "#16a34a" // Green for 40K
-                                : index === 1
-                                  ? "#2563eb" // Blue for 30K
-                                  : "#9ca3af" // Gray for 20K
-                            }
-                            radius={[0, 4, 4, 0]}
-                          />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
 
-                {/* Status Labels */}
-                <div className="flex flex-col space-y-4 mt-2">
-                  {barData.map((item, index) => (
-                    <div key={`status-${index}`} className="flex justify-between">
-                      <span className="text-sm text-gray-500">{item.status}</span>
-                      <span
-                        className={`text-sm font-medium ${index === 0
-                          ? "text-green-600"
-                          : index === 1
-                            ? "text-blue-600"
-                            : "text-gray-600"
-                          }`}
-                      >
-                        {item.achieved}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Month Labels */}
-                <div className="flex justify-between pt-4 mt-auto">
-                  {months.map((month) => (
-                    <span key={month} className="text-xs text-gray-500">
-                      {month}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -303,4 +270,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Index
